@@ -81,7 +81,6 @@ export class TrilaterationService {
       console.error('TRILATERATION FAILS %o', error);
       return null;
     }
-    // based on: https://en.wikipedia.org/wiki/Trilateration
   }
 
   // some additional local functions declared here for

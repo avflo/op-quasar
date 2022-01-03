@@ -14,6 +14,7 @@ export class FireQuazarService {
   }
   public GetLocation(kenobi: number, skywalker: number, sato: number): any {
     try {
+      console.log('SHIP DISTANCES: %o', [kenobi, skywalker, sato]);
       const position = this.TrilaterationService.trilaterate(
         {
           x: this.knownSatellites[0].coordenates[0],
@@ -35,7 +36,6 @@ export class FireQuazarService {
         },
         true,
       );
-      console.info('getLocation function');
       return position;
     } catch (error) {
       console.log(error);
