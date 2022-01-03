@@ -12,28 +12,39 @@ export class FireQuazarService {
     );
     console.log(this.knownSatellites);
   }
-  public GetLocation(kenobi: number, skywalker: number, sato: number): any {
+  public GetLocation(
+    kenobiDist: number,
+    skywalkerDist: number,
+    satoDist: number,
+  ): any {
     try {
-      console.log('SHIP DISTANCES: %o', [kenobi, skywalker, sato]);
+      console.log('SHIP DISTANCES: %o', [kenobiDist, skywalkerDist, satoDist]);
+
+      const kenobiVector = this.TrilaterationService.vector(
+        this.knownSatellites[0].coordenates[0],
+        this.knownSatellites[0].coordenates[1],
+        0,
+        kenobiDist,
+      );
+
+      const skywalkerVector = this.TrilaterationService.vector(
+        this.knownSatellites[1].coordenates[0],
+        this.knownSatellites[1].coordenates[1],
+        0,
+        skywalkerDist,
+      );
+
+      const satoVector = this.TrilaterationService.vector(
+        this.knownSatellites[2].coordenates[0],
+        this.knownSatellites[2].coordenates[1],
+        0,
+        satoDist,
+      );
+
       const position = this.TrilaterationService.trilaterate(
-        {
-          x: this.knownSatellites[0].coordenates[0],
-          y: this.knownSatellites[0].coordenates[1],
-          z: 0,
-          r: kenobi,
-        },
-        {
-          x: this.knownSatellites[1].coordenates[0],
-          y: this.knownSatellites[1].coordenates[1],
-          z: 0,
-          r: skywalker,
-        },
-        {
-          x: this.knownSatellites[2].coordenates[0],
-          y: this.knownSatellites[2].coordenates[1],
-          z: 0,
-          r: sato,
-        },
+        kenobiVector,
+        skywalkerVector,
+        satoVector,
         true,
       );
       return position;

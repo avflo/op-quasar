@@ -1,5 +1,11 @@
 import { Injectable } from '@nestjs/common';
 
+interface vector {
+  x: number;
+  y: number;
+  z: number;
+  r: number;
+}
 @Injectable()
 export class TrilaterationService {
   /**
@@ -23,9 +29,23 @@ export class TrilaterationService {
    * @param {bool} return_middle If two solution found then return the center of them
    * @return {Object|Array|null} { x, y, z } or [ { x, y, z }, { x, y, z } ] or null
    */
-  public trilaterate(p1, p2, p3, return_middle) {
+
+  public vector(x: number, y: number, z: number | null, r: number): vector {
+    return {
+      x,
+      y,
+      z: z ? z : 0,
+      r,
+    };
+  }
+  public trilaterate(
+    p1: vector,
+    p2: vector,
+    p3: vector,
+    return_middle: boolean,
+  ): Array<number> {
     try {
-      console.log([p1, p2, p3, return_middle]);
+      console.log('Trilateration %o', [p1, p2, p3, return_middle]);
       const ex = this.vector_divide(
         this.vector_subtract(p2, p1),
         this.norm(this.vector_subtract(p2, p1)),
@@ -87,20 +107,20 @@ export class TrilaterationService {
   // scalar and vector operations
 
   // eslint-disable-next-line @typescript-eslint/adjacent-overload-signatures
-  public sqr(a) {
+  private sqr(a) {
     //console.log('sqr', a * a);
     return a * a;
   }
 
-  public norm(a) {
+  private norm(a) {
     return Math.sqrt(this.sqr(a.x) + this.sqr(a.y) + this.sqr(a.z));
   }
 
-  public dot(a, b) {
+  private dot(a, b) {
     return a.x * b.x + a.y * b.y + a.z * b.z;
   }
 
-  public vector_subtract(a, b) {
+  private vector_subtract(a, b) {
     return {
       x: a.x - b.x,
       y: a.y - b.y,
@@ -108,7 +128,7 @@ export class TrilaterationService {
     };
   }
 
-  public vector_add(a, b): any {
+  private vector_add(a, b): any {
     return {
       x: a.x + b.x,
       y: a.y + b.y,
@@ -116,7 +136,7 @@ export class TrilaterationService {
     };
   }
 
-  public vector_divide(a, b) {
+  private vector_divide(a, b) {
     return {
       x: a.x / b,
       y: a.y / b,
@@ -124,7 +144,7 @@ export class TrilaterationService {
     };
   }
 
-  public vector_multiply(a, b) {
+  private vector_multiply(a, b) {
     return {
       x: a.x * b,
       y: a.y * b,
@@ -132,7 +152,7 @@ export class TrilaterationService {
     };
   }
 
-  public vector_cross(a, b) {
+  private vector_cross(a, b) {
     return {
       x: a.y * b.z - a.z * b.y,
       y: a.z * b.x - a.x * b.z,
