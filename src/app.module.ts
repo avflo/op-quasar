@@ -4,6 +4,8 @@ import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
 import { FireQuazarModule } from './fire-quazar/fire-quazar.module';
 import { TrilaterationModule } from './trilateration/trilateration.module';
+import { SatelliteService } from './satellite/satellite.service';
+import { SatelliteModule } from './satellite/satellite.module';
 import configuration from './config/configuration';
 
 @Module({
@@ -13,8 +15,9 @@ import configuration from './config/configuration';
     }),
     FireQuazarModule,
     TrilaterationModule,
+    SatelliteModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, SatelliteService],
 })
 export class AppModule {}
