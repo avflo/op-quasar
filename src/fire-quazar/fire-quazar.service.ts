@@ -1,16 +1,20 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable, forwardRef } from '@nestjs/common';
 import { TrilaterationService } from '../trilateration/trilateration.service';
+import { SatelliteService } from '../satellite/satellite.service';
+import { AllianceRebelService } from '../alliance-rebel/alliance-rebel.service';
 
 @Injectable()
 export class FireQuazarService {
-  satellites: Array<any> = [];
-  constructor(private TrilaterationService: TrilaterationService) {
-    this.satellites.push(
-      { name: 'kenobi', coordenates: [-500, -200] },
-      { name: 'skywalker', coordenates: [100, -100] },
-      { name: 'sato', coordenates: [500, 100] },
-    );
-    console.log(this.satellites);
+  private knownSatellites: Array<any> = [];
+  constructor(
+    @Inject(forwardRef(() => SatelliteService))
+    private AllianceRebelService: AllianceRebelService,
+  ) {
+    this.knownSatellites = [
+      { name: 'kenobi', cordinates: [-500, -200] },
+      { name: 'skywalker', cordinates: [100, -100] },
+      { name: 'sato', cordinates: [500, 100] },
+    ];
   }
   public GetLocation(
     kenobiDist: number,
@@ -18,28 +22,18 @@ export class FireQuazarService {
     satoDist: number,
   ): Array<number> {
     try {
-      const distances = [kenobiDist, skywalkerDist, satoDist];
+      const distances: Array<number> = [kenobiDist, skywalkerDist, satoDist];
+      const satellites: Array<SatelliteService> = [];
       console.log('SHIP DISTANCES: %o', distances);
 
-      const vector: Array<any> = [];
-      this.satellites.forEach((satellite, index) => {
-        vector.push(
-          this.TrilaterationService.vector(
-            satellite.coordenates[0],
-            satellite.coordenates[1],
-            0,
-            distances[index],
-          ),
+      this.knownSatellites.forEach((sat, index) => {
+        satellites.push(
+          new SatelliteService('sat.name', distances[index], [], [100, 100]),
         );
       });
 
-      const position = this.TrilaterationService.trilaterate(
-        vector[0],
-        vector[1],
-        vector[2],
-        true,
-      );
-      return position;
+      const alliance = new AllianceRebelService(satellites);
+      return alliance.findShipCoordinates();
     } catch (error) {
       console.log(error);
       return [];
