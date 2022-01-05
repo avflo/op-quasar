@@ -11,31 +11,20 @@ import { AllianceRebelModule } from './alliance-rebel/alliance-rebel.module';
 import { AllianceRebelService } from './alliance-rebel/alliance-rebel.service';
 import configuration from './config/configuration';
 
-/* const satelliteFactory = {
-  provide: 'SATELLITE',
-  useFactory: () => {
-    return {
-      create: function (sat: any): SatelliteService {
-        return new SatelliteService(
-          sat.name,
-          sat.distance,
-          sat.message,
-          sat.message,
-        );
-      },
-    };
-  },
-}; */
+const satellites = [
+  { name: 'kenobi', distance: 0, message: [], coordinates: [-500, -200] },
+  { name: 'skywalker', distance: 0, message: [], coordinates: [100, -100] },
+  { name: 'sato', distance: 0, message: [], coordinates: [500, 100] },
+];
 
 @Module({
   imports: [
+    AllianceRebelModule.register(satellites),
     ConfigModule.forRoot({
       load: [configuration],
     }),
-    AllianceRebelModule,
-    SatelliteModule,
   ],
   controllers: [AppController],
-  providers: [AppService, AllianceRebelService, SatelliteService],
+  providers: [AppService],
 })
 export class AppModule {}

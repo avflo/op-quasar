@@ -1,18 +1,56 @@
 import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { SatelliteService } from '../satellite/satellite.service';
+import { Satellite } from '../satellite/satellite.interface';
 import { TrilaterationService } from '../trilateration/trilateration.service';
+import { AllianceRebel } from './alliante-rebel.interface';
+
 @Injectable()
 export class AllianceRebelService {
-  private satellites: Array<any> = [];
+  private satellites: Array<Satellite>;
   private trilateration: TrilaterationService;
 
-  create(satellites: Array<any>) {
+  constructor(@Inject('ALLIANCE_REBEL_OPTIONS') options: AllianceRebel) {
+    console.log('construct alliance', options);
+    /*  options.forEach((sat) => {
+      this.satellites.push(sat);
+    }); */
+    this.satellites = [...options];
+    console.log('alliance', this.satellites);
+  }
+  /* create(satellites: Array<any>) {
     this.satellites = satellites;
     return this;
   }
+ */
+  getSatellites() {
+    console.log('getSatellites', this.satellites);
+    return this.satellites;
+  }
+  findShipCoordinates() {
+    /* const vectors = [];
+    this.trilateration = new TrilaterationService();
+
+    this.satellites.forEach((sat) => {
+      const vector = this.trilateration.vector(
+        sat.getCoordinates()[0],
+        sat.getCoordinates()[1],
+        0,
+        sat.getdistance(),
+      );
+      vectors.push(vector);
+    });
+
+    const position = this.trilateration.trilaterate(
+      vectors[0],
+      vectors[1],
+      vectors[2],
+      true,
+    );
+    return position; */
+  }
 
   decodeMessage() {
-    const decodedMsg: string[] = [];
+    /* const decodedMsg: string[] = [];
 
     //saco mensajes erroneos del principio para corregir desfasaje
     const originalMsgLength = this.satellites
@@ -34,7 +72,7 @@ export class AllianceRebelService {
       }
     }
 
-    return decodedMsg.join(' ');
+    return decodedMsg.join(' '); */
   }
 
   isValidWord(word: string) {
@@ -49,28 +87,5 @@ export class AllianceRebelService {
     });
 
     return validWord;
-  }
-
-  findShipCoordinates() {
-    const vectors = [];
-    this.trilateration = new TrilaterationService();
-
-    this.satellites.forEach((sat) => {
-      const vector = this.trilateration.vector(
-        sat.getCoordinates()[0],
-        sat.getCoordinates()[1],
-        0,
-        sat.getdistance(),
-      );
-      vectors.push(vector);
-    });
-
-    const position = this.trilateration.trilaterate(
-      vectors[0],
-      vectors[1],
-      vectors[2],
-      true,
-    );
-    return position;
   }
 }

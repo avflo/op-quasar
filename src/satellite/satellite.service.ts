@@ -1,11 +1,5 @@
 import { Injectable } from '@nestjs/common';
-
-export interface Satellite {
-  name: string;
-  distance: number;
-  message: string[];
-  coordinates: Array<number>;
-}
+import { Satellite } from './satellite.interface';
 
 @Injectable()
 export class SatelliteService {
