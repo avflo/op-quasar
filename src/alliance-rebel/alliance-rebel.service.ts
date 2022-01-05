@@ -6,19 +6,17 @@ import { AllianceRebel } from './alliante-rebel.interface';
 
 @Injectable()
 export class AllianceRebelService {
-  private satellites: Array<Satellite>;
+  private satellites: Array<SatelliteService> = [];
   private trilateration: TrilaterationService;
 
   constructor(@Inject('ALLIANCE_REBEL_OPTIONS') options: AllianceRebel) {
     console.log('construct alliance', options);
-    /*  options.forEach((sat) => {
-      this.satellites.push(sat);
-    }); */
-
-    /* options.forEach((opt) => {
-        this.
-    }); */
-    this.satellites = [...options];
+    //const testSat = new SatelliteService(options[0]);
+    //console.log('test sat', testSat);
+    options.forEach((sat) => {
+      const satellite = new SatelliteService(sat);
+      this.satellites.push(satellite);
+    });
     console.log('alliance', this.satellites);
   }
   /* create(satellites: Array<any>) {
@@ -36,21 +34,22 @@ export class AllianceRebelService {
 
     // add distance to each satellite
     this.satellites.map((sat, index) => {
-      sat.distance = distances[index];
+      sat.setDistance(distances[index]);
+      //sat.distance = distances[index];
       return sat; //{ ...sat };
     });
 
     console.log('SAT + DISTANCES', this.satellites);
     this.satellites.forEach((sat) => {
       const vector = this.trilateration.vector(
-        sat.coordinates[0],
+        /* sat.coordinates[0],
         sat.coordinates[1],
         0,
-        sat.distance,
-        /* sat.getCoordinates()[0],
+        sat.distance, */
+        sat.getCoordinates()[0],
         sat.getCoordinates()[1],
         0,
-        sat.getdistance(), */
+        sat.getdistance(),
       );
       vectors.push(vector);
     });

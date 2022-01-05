@@ -8,14 +8,17 @@ export class SatelliteService {
   private message: Array<string>;
   private coordinates: Array<number>;
 
-  create(options: Satellite) {
+  constructor(options: Satellite) {
     this.name = options.name;
-    this.distance = options.distance;
+    this.distance = options.distance || 0;
     this.message = options.message;
     this.coordinates = options.coordinates;
 
     console.log('NEW SATELLITE', [options]);
-    return this;
+  }
+
+  setDistance(distance: number) {
+    this.distance = distance;
   }
 
   getName() {
