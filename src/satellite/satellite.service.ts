@@ -1,22 +1,29 @@
 import { Injectable } from '@nestjs/common';
 
+export interface Satellite {
+  name: string;
+  distance: number;
+  message: string[];
+  coordinates: Array<number>;
+}
+
 @Injectable()
 export class SatelliteService {
   private name: string;
   private distance: number;
   private message: Array<string>;
   private coordinates: Array<number>;
-  constructor(
-    name: string,
-    distance: number,
-    message: string[],
-    coordinates: Array<number>,
-  ) {
-    this.name = name;
-    this.distance = distance;
-    this.message = message;
-    this.coordinates = coordinates;
+
+  create(options: Satellite) {
+    this.name = options.name;
+    this.distance = options.distance;
+    this.message = options.message;
+    this.coordinates = options.coordinates;
+
+    console.log('NEW SATELLITE', [options]);
+    return this;
   }
+
   getName() {
     return this.name;
   }

@@ -1,11 +1,11 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from '../app.module';
-import { FireQuazarService } from '../fire-quazar/fire-quazar.service';
+import { AppService } from '../app.service';
 
 async function bootstrap() {
   const application = await NestFactory.createApplicationContext(AppModule);
   const args = process.argv.slice(2);
-  const fireQuazar = application.get<FireQuazarService>(FireQuazarService);
+  const fireQuazar = application.get<AppService>(AppService);
 
   switch (args[0]) {
     case 'ship-location':

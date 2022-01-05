@@ -4,13 +4,11 @@ import { TrilaterationService } from '../trilateration/trilateration.service';
 @Injectable()
 export class AllianceRebelService {
   private satellites: Array<any> = [];
-  //private trilateration: TrilaterationService = new TrilaterationService();
-  constructor(
-    /*  @Inject(forwardRef(() => SatelliteService))
-    @Inject(forwardRef(() => TrilaterationService)) */
-    satellites: Array<any>,
-  ) {
+  private trilateration: TrilaterationService;
+
+  create(satellites: Array<any>) {
     this.satellites = satellites;
+    return this;
   }
 
   decodeMessage() {
@@ -55,22 +53,24 @@ export class AllianceRebelService {
 
   findShipCoordinates() {
     const vectors = [];
+    this.trilateration = new TrilaterationService();
 
-    /* this.satellites.forEach((sat) => {
-      vectors.push(
+    this.satellites.forEach((sat) => {
+      const vector = this.trilateration.vector(
         sat.getCoordinates()[0],
         sat.getCoordinates()[1],
         0,
-        sat.getdistance,
+        sat.getdistance(),
       );
+      vectors.push(vector);
     });
- */
-    /* const position = this.TrilaterationService.trilaterate(
+
+    const position = this.trilateration.trilaterate(
       vectors[0],
       vectors[1],
       vectors[2],
       true,
-    ); */
-    return null;
+    );
+    return position;
   }
 }

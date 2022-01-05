@@ -28,7 +28,7 @@ export class FireQuazarService {
 
       this.knownSatellites.forEach((sat, index) => {
         satellites.push(
-          new SatelliteService('sat.name', distances[index], [], [100, 100]),
+          new SatelliteService(sat.name, distances[index], [], sat.cordinates),
         );
       });
 

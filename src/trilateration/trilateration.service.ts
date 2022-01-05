@@ -45,7 +45,7 @@ export class TrilaterationService {
     return_middle: boolean,
   ): Array<number> {
     try {
-      console.log('Trilateration %o', [p1, p2, p3, return_middle]);
+      console.log('Trilateration ', [p1, p2, p3, return_middle]);
       const ex = this.vector_divide(
         this.vector_subtract(p2, p1),
         this.norm(this.vector_subtract(p2, p1)),
