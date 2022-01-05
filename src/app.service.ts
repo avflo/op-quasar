@@ -14,8 +14,6 @@ export class AppService {
       //const satellites: Array<SatelliteService> = [];
       console.log('SHIP DISTANCES: %o', distances);
 
-      return this.allianceRebel.getSatellites();
-
       /* this.knownSatellites.forEach((sat, index) => {
         const satellite = this.satellite.create({
           name: sat.name,
@@ -29,9 +27,9 @@ export class AppService {
       });
 
       console.log('available satellites', satellites);
-
+      */
       //const alliance = this.allianceRebel.create(satellites);
-      return this.allianceRebel.findShipCoordinates(); */
+      return this.allianceRebel.findShipCoordinates(distances);
     } catch (error) {
       console.log(error);
       return [];

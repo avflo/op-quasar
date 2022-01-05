@@ -14,6 +14,10 @@ export class AllianceRebelService {
     /*  options.forEach((sat) => {
       this.satellites.push(sat);
     }); */
+
+    /* options.forEach((opt) => {
+        this.
+    }); */
     this.satellites = [...options];
     console.log('alliance', this.satellites);
   }
@@ -26,16 +30,27 @@ export class AllianceRebelService {
     console.log('getSatellites', this.satellites);
     return this.satellites;
   }
-  findShipCoordinates() {
-    /* const vectors = [];
+  findShipCoordinates(distances: Array<number>) {
+    const vectors = [];
     this.trilateration = new TrilaterationService();
 
+    // add distance to each satellite
+    this.satellites.map((sat, index) => {
+      sat.distance = distances[index];
+      return sat; //{ ...sat };
+    });
+
+    console.log('SAT + DISTANCES', this.satellites);
     this.satellites.forEach((sat) => {
       const vector = this.trilateration.vector(
-        sat.getCoordinates()[0],
+        sat.coordinates[0],
+        sat.coordinates[1],
+        0,
+        sat.distance,
+        /* sat.getCoordinates()[0],
         sat.getCoordinates()[1],
         0,
-        sat.getdistance(),
+        sat.getdistance(), */
       );
       vectors.push(vector);
     });
@@ -46,7 +61,7 @@ export class AllianceRebelService {
       vectors[2],
       true,
     );
-    return position; */
+    return position;
   }
 
   decodeMessage() {
