@@ -1,11 +1,6 @@
 import { Injectable } from '@nestjs/common';
+import { Vector } from './vector.interface';
 
-interface vector {
-  x: number;
-  y: number;
-  z: number;
-  r: number;
-}
 @Injectable()
 export class TrilaterationService {
   /**
@@ -30,7 +25,7 @@ export class TrilaterationService {
    * @return {Object|Array|null} { x, y, z } or [ { x, y, z }, { x, y, z } ] or null
    */
 
-  public vector(x: number, y: number, z: number | null, r: number): vector {
+  public vector(x: number, y: number, z: number | null, r: number): Vector {
     return {
       x,
       y,
@@ -39,11 +34,11 @@ export class TrilaterationService {
     };
   }
   public trilaterate(
-    p1: vector,
-    p2: vector,
-    p3: vector,
+    p1: Vector,
+    p2: Vector,
+    p3: Vector,
     return_middle: boolean,
-  ): Array<number> {
+  ): Array<number> | null {
     try {
       console.log('Trilateration ', [p1, p2, p3, return_middle]);
       const ex = this.vector_divide(
