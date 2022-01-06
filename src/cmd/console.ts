@@ -10,11 +10,11 @@ async function bootstrap() {
   switch (args[0]) {
     case 'ship-location':
       console.log('📡 GET IMPERIAL SHIP LOCATION...');
-      if (args.length >= 4) {
+      if (args.length == 4) {
         // EXAMPLE: (300, 632.45, 1000) or (100.0, 115.5, 142.7);
         console.log(
-          '📍 SHIP POSITION: ',
-          fireQuazar.GetLocation(
+          '📍 SHIP LOCATION: ',
+          fireQuazar.getLocation(
             parseFloat(args[1]),
             parseFloat(args[2]),
             parseFloat(args[3]),
@@ -22,7 +22,7 @@ async function bootstrap() {
         );
       } else {
         // array elements are less than the expected 'command', 'dist1', 'dist1', 'dist3',
-        console.error('need at last 3 distances');
+        console.error('only 3 distances allowed');
       }
       break;
     case 'decode-message':

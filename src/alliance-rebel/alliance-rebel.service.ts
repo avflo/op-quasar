@@ -1,66 +1,59 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { SatelliteService } from '../satellite/satellite.service';
-import { Satellite } from '../satellite/satellite.interface';
 import { TrilaterationService } from '../trilateration/trilateration.service';
 import { AllianceRebel } from './alliante-rebel.interface';
 
 @Injectable()
 export class AllianceRebelService {
   private satellites: Array<SatelliteService> = [];
-  private trilateration: TrilaterationService;
 
-  constructor(@Inject('ALLIANCE_REBEL_OPTIONS') options: AllianceRebel) {
-    console.log('construct alliance', options);
-    //const testSat = new SatelliteService(options[0]);
-    //console.log('test sat', testSat);
+  constructor(
+    @Inject('ALLIANCE_REBEL_OPTIONS') options: AllianceRebel,
+    private trilateration: TrilaterationService,
+  ) {
+    // instance each satellite available
     options.forEach((sat) => {
-      const satellite = new SatelliteService(sat);
+      const satellite: SatelliteService = new SatelliteService(sat);
       this.satellites.push(satellite);
     });
-    console.log('alliance', this.satellites);
   }
-  /* create(satellites: Array<any>) {
-    this.satellites = satellites;
-    return this;
-  }
- */
-  getSatellites() {
-    console.log('getSatellites', this.satellites);
-    return this.satellites;
-  }
-  findShipCoordinates(distances: Array<number>) {
-    const vectors = [];
-    this.trilateration = new TrilaterationService();
 
-    // add distance to each satellite
-    this.satellites.map((sat, index) => {
-      sat.setDistance(distances[index]);
-      //sat.distance = distances[index];
-      return sat; //{ ...sat };
-    });
+  findShipCoordinates(distances: Array<number>): Array<number> {
+    try {
+      const vectors = [];
 
-    console.log('SAT + DISTANCES', this.satellites);
-    this.satellites.forEach((sat) => {
-      const vector = this.trilateration.vector(
-        /* sat.coordinates[0],
-        sat.coordinates[1],
-        0,
-        sat.distance, */
-        sat.getCoordinates()[0],
-        sat.getCoordinates()[1],
-        0,
-        sat.getdistance(),
+      // add given ship distance to each satellite
+      if (distances.length != this.satellites.length) {
+        throw new Error(
+          'Cant get ship position: not equal lenght distances array and satellites array',
+        );
+      }
+
+      this.satellites.map((sat, index) => {
+        sat.setDistance(distances[index]);
+        return sat;
+      });
+
+      this.satellites.forEach((sat) => {
+        const vector = this.trilateration.vector(
+          sat.getCoordinates()[0],
+          sat.getCoordinates()[1],
+          0,
+          sat.getdistance(),
+        );
+        vectors.push(vector);
+      });
+
+      const position = this.trilateration.trilaterate(
+        vectors[0],
+        vectors[1],
+        vectors[2],
+        true,
       );
-      vectors.push(vector);
-    });
-
-    const position = this.trilateration.trilaterate(
-      vectors[0],
-      vectors[1],
-      vectors[2],
-      true,
-    );
-    return position;
+      return position;
+    } catch (error) {
+      return [];
+    }
   }
 
   decodeMessage() {
