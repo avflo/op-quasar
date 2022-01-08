@@ -2,6 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { SatelliteService } from '../satellite/satellite.service';
 import { TrilaterationService } from '../trilateration/trilateration.service';
 import { AllianceRebel } from './alliante-rebel.interface';
+import { messages } from '../cmd/messages';
 
 @Injectable()
 export class AllianceRebelService {
@@ -56,16 +57,41 @@ export class AllianceRebelService {
     }
   }
 
-  decodeMessage() {
-    /* const decodedMsg: string[] = [];
+  decodeMessage(messages: Array<Array<string>>) {
+    //const decodedMsg: string[] = [];
 
-    //saco mensajes erroneos del principio para corregir desfasaje
+    this.satellites.forEach((sat, index) => {
+      sat.setMessage(messages[index]);
+    });
+
+    /**
+     * remove delay in messages
+     * map allow us to get message length for each satellite into a new array
+     * then reduce a: previous value b: accumulated[] value
+     *
+     * each satellite message array got a piece of complete message but the length of each array could be
+     * different because the "delay" or "desfasaje" so we need to find the message with the minimun array length
+     * to remove the delay
+     * **/
     const originalMsgLength = this.satellites
-      .map((m) => m.getMsgLength())
-      .reduce((a, b) => Math.min(a, b));
+      .map((sat) => sat.getMsgLength())
+      .reduce((prev, acc) => Math.min(prev, acc)); //replace Math.min(... [1, 6, 2, 3, 4]) */
+
     this.satellites.forEach((s) => s.fixMsgDelay(originalMsgLength));
 
-    if (this.satellites.length > 0) {
+    const msg = [];
+
+    this.satellites.forEach((s) => {
+      msg.push(s.getMessage());
+    });
+
+    console.log('CLEANED', msg);
+
+    const decodedPhrase = this.joinMessage(msg);
+
+    return decodedPhrase;
+
+    /* if (this.satellites.length > 0) {
       const firstSat = this.satellites[0];
       const remainingSats = this.satellites.slice(1, this.satellites.length);
 
@@ -77,9 +103,11 @@ export class AllianceRebelService {
           decodedMsg.push(this.searchMissingWord(remainingSats, i));
         }
       }
-    }
+    } 
 
-    return decodedMsg.join(' '); */
+    console.log(decodedMsg);
+    return decodedMsg.join(' ');
+    */
   }
 
   isValidWord(word: string) {
@@ -94,5 +122,35 @@ export class AllianceRebelService {
     });
 
     return validWord;
+  }
+
+  private joinMessage(messages: Array<Array<string>>) {
+    let joinMessage = [];
+
+    for (let index = 0; index < messages.length; index++) {
+      const message = messages[index];
+      console.log('index', index);
+      console.log('✉️', message);
+      if (index == 0) {
+        console.log('index 0 joinMessage = message');
+        joinMessage = message;
+        continue;
+      }
+
+      joinMessage.forEach((word, position) => {
+        console.log('each joinMessage');
+        if (word === '') {
+          console.log('word = "" ', word);
+          console.log('equal joinMessage and message', [
+            joinMessage[position],
+            message[position],
+          ]);
+          joinMessage[position] = message[position];
+        }
+      });
+    }
+
+    console.log(' ==> ', joinMessage);
+    return joinMessage.join(' ');
   }
 }

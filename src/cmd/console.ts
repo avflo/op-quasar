@@ -1,6 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from '../app.module';
 import { AppService } from '../app.service';
+import { messages } from './messages';
 
 async function bootstrap() {
   const application = await NestFactory.createApplicationContext(AppModule);
@@ -21,12 +22,13 @@ async function bootstrap() {
           ),
         );
       } else {
-        // array elements are less than the expected 'command', 'dist1', 'dist1', 'dist3',
+        // array elements are less than the expected 'command', 'dist1', 'dist1', 'dist3'
         console.error('only 3 distances allowed');
       }
       break;
     case 'decode-message':
-      console.log('decode message command');
+      console.log('🕵🏻 📨 decoding message...');
+      console.info('📩 Message: ', fireQuazar.getMessage(messages));
       break;
     default:
       console.log('Command not found');
