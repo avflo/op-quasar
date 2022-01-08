@@ -18,7 +18,7 @@ export class AllianceRebelService {
     });
   }
 
-  findShipCoordinates(distances: Array<number>): Array<number> {
+  public findShipCoordinates(distances: Array<number>): Array<number> {
     try {
       const vectors = [];
 
@@ -56,43 +56,57 @@ export class AllianceRebelService {
     }
   }
 
-  decodeMessage() {
-    /* const decodedMsg: string[] = [];
+  public decodeMessage(messages: Array<Array<string>>): string | null {
+    try {
+      // set each message to each satellite
+      this.satellites.forEach((sat, index) => {
+        sat.setMessage(messages[index]);
+      });
 
-    //saco mensajes erroneos del principio para corregir desfasaje
-    const originalMsgLength = this.satellites
-      .map((m) => m.getMsgLength())
-      .reduce((a, b) => Math.min(a, b));
-    this.satellites.forEach((s) => s.fixMsgDelay(originalMsgLength));
+      /**
+       * Remove delay in messages
+       * map allow us to get message length for each satellite into a new array
+       * then reduce a: previous value b: accumulated[] value, finally we got the original phrase length
+       * **/
+      const originalMsgLength = this.satellites
+        .map((sat) => sat.getMsgLength())
+        .reduce((prev, acc) => Math.min(prev, acc));
 
-    if (this.satellites.length > 0) {
-      const firstSat = this.satellites[0];
-      const remainingSats = this.satellites.slice(1, this.satellites.length);
+      /**
+       * each satellite message array got a piece of complete message but the length of each array could be
+       * different because the "delay" or "desfasaje" so we need to find the message with the minimun array length
+       * to remove the delay, once we find it slice each message on each satellite
+       */
+      this.satellites.forEach((s) => s.fixMsgDelay(originalMsgLength));
 
-      for (let i = 0; i < originalMsgLength; i++) {
-        const word = firstSat.getWordAt(i);
-
-        if (this.isValidWord(word)) decodedMsg.push(word);
-        else {
-          decodedMsg.push(this.searchMissingWord(remainingSats, i));
-        }
-      }
+      /**
+       * Finally decode the message
+       * replacing the missing words on the first satellite message array
+       */
+      return this.joinMessage();
+    } catch (error) {
+      console.error('💥 DECODE MESSAGE ERROR: %o', error);
+      return null;
     }
-
-    return decodedMsg.join(' '); */
   }
 
-  isValidWord(word: string) {
-    return word !== '';
-  }
+  private joinMessage() {
+    try {
+      const joinMessage = this.satellites[0].getMessage();
 
-  searchMissingWord(satellites: Array<any>, position: number) {
-    let validWord = '';
-    satellites.forEach((s) => {
-      const word = s.getWordAt(position);
-      if (this.isValidWord(word)) validWord = word;
-    });
-
-    return validWord;
+      // check every satellite after the first one
+      this.satellites.slice(1).forEach((sat) => {
+        // check every word in message that can replace the empty spaces
+        joinMessage.forEach((word, position) => {
+          joinMessage[position] =
+            word === '' ? sat.getMessage()[position] : word;
+        });
+      });
+      // clean empty strings in message
+      return joinMessage.join(' ');
+    } catch (error) {
+      console.error('💥 JOIN SECRET MESSAGE ERROR: %o', error);
+      return null;
+    }
   }
 }

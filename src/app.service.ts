@@ -18,7 +18,15 @@ export class AppService {
       return [];
     }
   }
-  public getMessage(messages: Array<string>) {
-    return messages;
+  public getMessage(messages: Array<Array<string>>) {
+    try {
+      if (messages.length != 3) {
+        throw Error('Error: Only 3 messages are allowed');
+      }
+      return this.allianceRebel.decodeMessage(messages);
+    } catch (error) {
+      console.error(error);
+      return String(error);
+    }
   }
 }

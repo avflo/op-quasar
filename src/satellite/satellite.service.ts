@@ -21,12 +21,20 @@ export class SatelliteService {
     this.distance = distance;
   }
 
+  setMessage(message: Array<string>) {
+    this.message = message;
+  }
+
   getName() {
     return this.name;
   }
 
   getCoordinates() {
     return this.coordinates;
+  }
+
+  getMessage(): Array<string> {
+    return this.message;
   }
 
   getMsgLength(): number {
@@ -38,6 +46,7 @@ export class SatelliteService {
   }
 
   fixMsgDelay(realLength: number) {
+    console.log('👌🏻FIXED DELAY', realLength);
     this.message = this.message.slice(
       this.message.length - realLength,
       this.message.length,
@@ -47,4 +56,8 @@ export class SatelliteService {
   getWordAt(position: number) {
     return this.message[position];
   }
+
+  /* getOriginalMsgLength() {
+    Math.min(... this.message);
+  } */
 }
