@@ -2,7 +2,6 @@ import { Inject, Injectable } from '@nestjs/common';
 import { SatelliteService } from '../satellite/satellite.service';
 import { TrilaterationService } from '../trilateration/trilateration.service';
 import { AllianceRebel } from './alliante-rebel.interface';
-import { messages } from '../cmd/messages';
 
 @Injectable()
 export class AllianceRebelService {
@@ -19,7 +18,7 @@ export class AllianceRebelService {
     });
   }
 
-  findShipCoordinates(distances: Array<number>): Array<number> {
+  public findShipCoordinates(distances: Array<number>): Array<number> {
     try {
       const vectors = [];
 
@@ -57,100 +56,46 @@ export class AllianceRebelService {
     }
   }
 
-  decodeMessage(messages: Array<Array<string>>) {
-    //const decodedMsg: string[] = [];
-
+  public decodeMessage(messages: Array<Array<string>>) {
+    // set each message to each satellite
     this.satellites.forEach((sat, index) => {
       sat.setMessage(messages[index]);
     });
 
     /**
-     * remove delay in messages
+     * Remove delay in messages
      * map allow us to get message length for each satellite into a new array
-     * then reduce a: previous value b: accumulated[] value
-     *
-     * each satellite message array got a piece of complete message but the length of each array could be
-     * different because the "delay" or "desfasaje" so we need to find the message with the minimun array length
-     * to remove the delay
+     * then reduce a: previous value b: accumulated[] value, finally we got the phrase original length
      * **/
     const originalMsgLength = this.satellites
       .map((sat) => sat.getMsgLength())
-      .reduce((prev, acc) => Math.min(prev, acc)); //replace Math.min(... [1, 6, 2, 3, 4]) */
+      .reduce((prev, acc) => Math.min(prev, acc));
 
+    /**
+     * each satellite message array got a piece of complete message but the length of each array could be
+     * different because the "delay" or "desfasaje" so we need to find the message with the minimun array length
+     * to remove the delay, once we find it slice each message on each satellite
+     */
     this.satellites.forEach((s) => s.fixMsgDelay(originalMsgLength));
 
-    const msg = [];
-
-    this.satellites.forEach((s) => {
-      msg.push(s.getMessage());
-    });
-
-    console.log('CLEANED', msg);
-
-    const decodedPhrase = this.joinMessage(msg);
-
-    return decodedPhrase;
-
-    /* if (this.satellites.length > 0) {
-      const firstSat = this.satellites[0];
-      const remainingSats = this.satellites.slice(1, this.satellites.length);
-
-      for (let i = 0; i < originalMsgLength; i++) {
-        const word = firstSat.getWordAt(i);
-
-        if (this.isValidWord(word)) decodedMsg.push(word);
-        else {
-          decodedMsg.push(this.searchMissingWord(remainingSats, i));
-        }
-      }
-    } 
-
-    console.log(decodedMsg);
-    return decodedMsg.join(' ');
-    */
+    /**
+     * Finally decode the message
+     * replacing the missing words on the first satellite message array
+     */
+    return this.joinMessage();
   }
 
-  isValidWord(word: string) {
-    return word !== '';
-  }
+  private joinMessage() {
+    const joinMessage = this.satellites[0].getMessage();
 
-  searchMissingWord(satellites: Array<any>, position: number) {
-    let validWord = '';
-    satellites.forEach((s) => {
-      const word = s.getWordAt(position);
-      if (this.isValidWord(word)) validWord = word;
-    });
-
-    return validWord;
-  }
-
-  private joinMessage(messages: Array<Array<string>>) {
-    let joinMessage = [];
-
-    for (let index = 0; index < messages.length; index++) {
-      const message = messages[index];
-      console.log('index', index);
-      console.log('✉️', message);
-      if (index == 0) {
-        console.log('index 0 joinMessage = message');
-        joinMessage = message;
-        continue;
-      }
-
+    // check every satellite after the first one
+    this.satellites.slice(1).forEach((sat) => {
+      // check every word in message that can replace the empty spaces
       joinMessage.forEach((word, position) => {
-        console.log('each joinMessage');
-        if (word === '') {
-          console.log('word = "" ', word);
-          console.log('equal joinMessage and message', [
-            joinMessage[position],
-            message[position],
-          ]);
-          joinMessage[position] = message[position];
-        }
+        joinMessage[position] = word === '' ? sat.getMessage()[position] : word;
       });
-    }
-
-    console.log(' ==> ', joinMessage);
+    });
+    // clean empty strings in message
     return joinMessage.join(' ');
   }
 }
