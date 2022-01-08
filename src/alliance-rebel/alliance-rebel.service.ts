@@ -56,46 +56,57 @@ export class AllianceRebelService {
     }
   }
 
-  public decodeMessage(messages: Array<Array<string>>) {
-    // set each message to each satellite
-    this.satellites.forEach((sat, index) => {
-      sat.setMessage(messages[index]);
-    });
+  public decodeMessage(messages: Array<Array<string>>): string | null {
+    try {
+      // set each message to each satellite
+      this.satellites.forEach((sat, index) => {
+        sat.setMessage(messages[index]);
+      });
 
-    /**
-     * Remove delay in messages
-     * map allow us to get message length for each satellite into a new array
-     * then reduce a: previous value b: accumulated[] value, finally we got the phrase original length
-     * **/
-    const originalMsgLength = this.satellites
-      .map((sat) => sat.getMsgLength())
-      .reduce((prev, acc) => Math.min(prev, acc));
+      /**
+       * Remove delay in messages
+       * map allow us to get message length for each satellite into a new array
+       * then reduce a: previous value b: accumulated[] value, finally we got the original phrase length
+       * **/
+      const originalMsgLength = this.satellites
+        .map((sat) => sat.getMsgLength())
+        .reduce((prev, acc) => Math.min(prev, acc));
 
-    /**
-     * each satellite message array got a piece of complete message but the length of each array could be
-     * different because the "delay" or "desfasaje" so we need to find the message with the minimun array length
-     * to remove the delay, once we find it slice each message on each satellite
-     */
-    this.satellites.forEach((s) => s.fixMsgDelay(originalMsgLength));
+      /**
+       * each satellite message array got a piece of complete message but the length of each array could be
+       * different because the "delay" or "desfasaje" so we need to find the message with the minimun array length
+       * to remove the delay, once we find it slice each message on each satellite
+       */
+      this.satellites.forEach((s) => s.fixMsgDelay(originalMsgLength));
 
-    /**
-     * Finally decode the message
-     * replacing the missing words on the first satellite message array
-     */
-    return this.joinMessage();
+      /**
+       * Finally decode the message
+       * replacing the missing words on the first satellite message array
+       */
+      return this.joinMessage();
+    } catch (error) {
+      console.error('💥 DECODE MESSAGE ERROR: %o', error);
+      return null;
+    }
   }
 
   private joinMessage() {
-    const joinMessage = this.satellites[0].getMessage();
+    try {
+      const joinMessage = this.satellites[0].getMessage();
 
-    // check every satellite after the first one
-    this.satellites.slice(1).forEach((sat) => {
-      // check every word in message that can replace the empty spaces
-      joinMessage.forEach((word, position) => {
-        joinMessage[position] = word === '' ? sat.getMessage()[position] : word;
+      // check every satellite after the first one
+      this.satellites.slice(1).forEach((sat) => {
+        // check every word in message that can replace the empty spaces
+        joinMessage.forEach((word, position) => {
+          joinMessage[position] =
+            word === '' ? sat.getMessage()[position] : word;
+        });
       });
-    });
-    // clean empty strings in message
-    return joinMessage.join(' ');
+      // clean empty strings in message
+      return joinMessage.join(' ');
+    } catch (error) {
+      console.error('💥 JOIN SECRET MESSAGE ERROR: %o', error);
+      return null;
+    }
   }
 }
