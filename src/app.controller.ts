@@ -1,5 +1,15 @@
-import { Controller, Get } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Get,
+  Res,
+  Req,
+  HttpStatus,
+  Body,
+} from '@nestjs/common';
 import { AppService } from './app.service';
+import { TopSecretDTO } from './app.dto';
+import { Response } from 'express';
 
 @Controller()
 export class AppController {
@@ -8,5 +18,11 @@ export class AppController {
   @Get()
   getHello(): string {
     return 'FIRE QUAZAR';
+  }
+
+  @Post('/topsecret')
+  topSecret(@Body() topSecret: TopSecretDTO, @Res() res: Response) {
+    //this.appService.getLocation(topSecret.);
+    res.status(HttpStatus.OK).json([topSecret]);
   }
 }
