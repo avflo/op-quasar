@@ -10,6 +10,7 @@ import {
 import { AppService } from './app.service';
 import { TopSecretDTO } from './app.dto';
 import { Response } from 'express';
+import { HttpException } from '@nestjs/common';
 
 @Controller()
 export class AppController {
@@ -22,7 +23,24 @@ export class AppController {
 
   @Post('/topsecret')
   topSecret(@Body() topSecret: TopSecretDTO, @Res() res: Response) {
-    //this.appService.getLocation(topSecret.);
-    res.status(HttpStatus.OK).json([topSecret]);
+    const position = this.appService.getLocation(
+      topSecret.satellites[0].distance,
+      topSecret.satellites[1].distance,
+      topSecret.satellites[2].distance,
+    );
+
+    if (!position)
+      throw new HttpException('unknow ship position', HttpStatus.BAD_REQUEST);
+
+    const message = this.appService.getMessage([
+      topSecret.satellites[0].message,
+      topSecret.satellites[1].message,
+      topSecret.satellites[2].message,
+    ]);
+
+    if (!message)
+      throw new HttpException('unknow ship position', HttpStatus.BAD_REQUEST);
+
+    res.status(HttpStatus.OK).json({ position, message });
   }
 }
