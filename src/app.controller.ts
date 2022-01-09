@@ -8,13 +8,17 @@ import {
   Body,
 } from '@nestjs/common';
 import { AppService } from './app.service';
+import { ImperialSignalService } from './modules/imperial-signal/imperial-signal.service';
 import { TopSecretDTO } from './app.dto';
 import { Response } from 'express';
 import { HttpException } from '@nestjs/common';
 
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) {}
+  constructor(
+    private readonly appService: AppService,
+    private readonly imperialSignalService: ImperialSignalService,
+  ) {}
 
   @Get()
   getHello(): string {
@@ -42,5 +46,11 @@ export class AppController {
       throw new HttpException('unknow ship message', HttpStatus.BAD_REQUEST);
 
     res.status(HttpStatus.OK).json({ position, message });
+  }
+
+  @Post('/topsecret_split')
+  async topSecretSplit(@Res() res: Response) {
+    const saved = await this.imperialSignalService.createImperialSignal();
+    res.status(HttpStatus.OK).json({ saved });
   }
 }
