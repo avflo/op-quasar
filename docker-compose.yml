@@ -1,0 +1,19 @@
+version: '3.7'
+
+services:
+  firequasar:
+    container_name: firequasar
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: base
+    environment:
+      NODE_ENV: ${NODE_ENV}
+      PORT: ${PORT}
+      API_KEY: ${API_KEY}
+      MONGO_DB_URI: ${MONGO_DB_URI}
+    ports:
+      - ${PORT}:${PORT}  
+    volumes:
+      - ./:/opfirequasar_app
+    command: npm run start:dev
