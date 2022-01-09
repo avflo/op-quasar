@@ -1,6 +1,5 @@
-import { Injectable, Inject } from '@nestjs/common';
-import { AllianceRebelService } from './alliance-rebel/alliance-rebel.service';
-import { SatelliteService } from './satellite/satellite.service';
+import { Injectable } from '@nestjs/common';
+import { AllianceRebelService } from './modules/alliance-rebel/alliance-rebel.service';
 @Injectable()
 export class AppService {
   constructor(private allianceRebel: AllianceRebelService) {}

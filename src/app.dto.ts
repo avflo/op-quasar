@@ -10,11 +10,11 @@ export class TopSecretDTO {
   @ValidateNested({ each: true })
   @ArrayMinSize(3)
   @ArrayMaxSize(3)
-  satellites: Array<ImperialShipData>;
+  satellites: Array<TopSecretSplitDTO>;
 }
 
-type ImperialShipData = {
-  name: string;
+export class TopSecretSplitDTO {
   distance: number;
+  @IsArray()
   message: Array<string>;
-};
+}
