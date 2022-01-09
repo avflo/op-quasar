@@ -50,6 +50,7 @@ export class AllianceRebelService {
         vectors[2],
         true,
       );
+      console.log('📍 SHIP LOCATION: ', position);
       return position;
     } catch (error) {
       return [];
@@ -68,7 +69,7 @@ export class AllianceRebelService {
        * map allow us to get message length for each satellite into a new array
        * then reduce a: previous value b: accumulated[] value, finally we got the original phrase length
        * **/
-      const originalMsgLength = this.satellites
+      const realMsgLength = this.satellites
         .map((sat) => sat.getMsgLength())
         .reduce((prev, acc) => Math.min(prev, acc));
 
@@ -77,7 +78,11 @@ export class AllianceRebelService {
        * different because the "delay" or "desfasaje" so we need to find the message with the minimun array length
        * to remove the delay, once we find it slice each message on each satellite
        */
-      this.satellites.forEach((s) => s.fixMsgDelay(originalMsgLength));
+      console.log(
+        '🔧 FIXING DELAY - secret message real length: ',
+        realMsgLength,
+      );
+      this.satellites.forEach((s) => s.fixMsgDelay(realMsgLength));
 
       /**
        * Finally decode the message
@@ -103,6 +108,7 @@ export class AllianceRebelService {
         });
       });
       // clean empty strings in message
+      console.log('✉️ MESSAGE: ', joinMessage);
       return joinMessage.join(' ');
     } catch (error) {
       console.error('💥 JOIN SECRET MESSAGE ERROR: %o', error);

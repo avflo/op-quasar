@@ -46,7 +46,6 @@ export class SatelliteService {
   }
 
   fixMsgDelay(realLength: number) {
-    console.log('👌🏻FIXED DELAY', realLength);
     this.message = this.message.slice(
       this.message.length - realLength,
       this.message.length,

@@ -26,7 +26,7 @@ export class AppService {
       return this.allianceRebel.decodeMessage(messages);
     } catch (error) {
       console.error(error);
-      return String(error);
+      return null;
     }
   }
 }
