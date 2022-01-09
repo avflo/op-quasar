@@ -23,7 +23,7 @@ export class AppController {
 
   @Get()
   getHello(): string {
-    return 'FIRE QUAZAR';
+    return 'FIRE QUASAR';
   }
 
   @Post('/topsecret')
@@ -67,7 +67,6 @@ export class AppController {
   @Get('/topsecret_split')
   async topSecretSplit(@Res() res: Response) {
     const signals = await this.imperialSignalService.getAllSignals();
-    console.log(signals);
     if (!signals || signals.length != 3)
       throw new HttpException(
         'missed information, cant determinate message or position',
