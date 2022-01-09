@@ -4,9 +4,7 @@ import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
 import { AllianceRebelModule } from './modules/alliance-rebel/alliance-rebel.module';
 import configuration from './config/configuration';
-import { MongooseModule } from '@nestjs/mongoose';
 import { ImperialSignalModule } from './modules/imperial-signal/imperial-signal.module';
-import { ImperialSignalService } from './modules/imperial-signal/imperial-signal.service';
 import { DatabaseModule } from './database/database.module';
 
 const satellites = [

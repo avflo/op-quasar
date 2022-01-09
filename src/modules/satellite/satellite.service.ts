@@ -14,7 +14,7 @@ export class SatelliteService {
     this.message = options.message;
     this.coordinates = options.coordinates;
 
-    console.log('NEW SATELLITE', [options.name]);
+    console.log('🛰️ INITIALIZE NEW DEFAULT SATELLITE', options);
   }
 
   setDistance(distance: number) {
