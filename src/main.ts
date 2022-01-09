@@ -8,7 +8,7 @@ import { ValidationPipe } from '@nestjs/common/pipes';
 async function bootstrap() {
   // 🐱 NESTJS
   const app = await NestFactory.create(AppModule);
-  // HANDLE EXCEPTIONS
+  // HANDLE EXCEPTIONS & VALIDATIONS
   app.useGlobalFilters(new AllExceptionsFilter());
   app.useGlobalPipes(new ValidationPipe());
 

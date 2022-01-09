@@ -1,5 +1,3 @@
-import { ImperialSignal } from './modules/imperial-signal/imperial-signal.interface';
-
 import {
   IsArray,
   ValidateNested,
@@ -12,5 +10,11 @@ export class TopSecretDTO {
   @ValidateNested({ each: true })
   @ArrayMinSize(3)
   @ArrayMaxSize(3)
-  satellites: Array<ImperialSignal>;
+  satellites: Array<TopSecretSplitDTO>;
+}
+
+export class TopSecretSplitDTO {
+  distance: number;
+  @IsArray()
+  message: Array<string>;
 }
