@@ -39,7 +39,7 @@ export class AppController {
     ]);
 
     if (!message)
-      throw new HttpException('unknow ship position', HttpStatus.BAD_REQUEST);
+      throw new HttpException('unknow ship message', HttpStatus.BAD_REQUEST);
 
     res.status(HttpStatus.OK).json({ position, message });
   }
