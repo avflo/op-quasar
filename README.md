@@ -1,49 +1,77 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo_text.svg" width="320" alt="Nest Logo" /></a>
-</p>
-
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
-
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+# Operación Fuego de Quasar
 
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+<img align="right" width="150" height="150" src="logo.png" alt="Alliance Logo" /></img>
+
+This repository contains the source code of _Operation Fire Quasar_ MELI challenge
+
+> Como jefe de comunicaciones rebelde, tu misión es crear un programa que retorne la fuente y contenido del mensaje de auxilio . Para esto, cuentas con tres satélites que te permitirán triangular la posición, ¡pero cuidado! el mensaje puede no llegar completo a cada satélite debido al campo de asteroides frente a la nave.
+
+### Default Satellites Positions
+
+- Kenobi:   [-500,   -200]  
+- Skywalker:   [100,   -100]  
+- Sato:   [500,   100] 
 
 ## Installation
 
 ```bash
 $ npm install
 ```
+### Prerequisites  
+
+- NodeJs `^14.0` 
+- Docker & docker-compose (if execute under a docker container)
+
+### Environment
+
+Create an `.env` file on root of proyect or export the requiered environment variables, you can check for the required env vars on `.env.example` file
 
 ## Running the app
 
+Run the following to start the app locally
 ```bash
-# development
-$ npm run start
-
-# watch mode
+# development watch mode
 $ npm run start:dev
 
 # production mode
 $ npm run start:prod
 ```
+To run it using Docker do the following
+
+```bash
+# run it on docker container
+$ make up
+
+# shut down running docker container
+$ make down
+```
+Check `Makefile` for more details
+
+## Command Execute
+
+For the _ship-location_ you must pass at least and **only 3** distances params for each default satellite 
+
+For the _decode-message_ command you can change the input data by editing the file `src/cmd/messages.ts`
+
+```bash
+# Get Location
+$ npm run cmd ship-location 300 632.45 1000
+
+# Get Message
+$ npm run cmd decode-message
+```
+
+## API
+
+Operations Fire Quasar is available under _AWS ECS Service_, you can check the api documentation here:
+
+[OP FIRE QUASAR | API DOCUMENTATION](https://documenter.getpostman.com/view/19076484/UVXesdtv)
+
+To check some **success** and **error** examples on each endpoint you can change the response example at the top of each request.
+
+<img align="center" width="395" height="280" src="resp_examples.gif" alt="Alliance Logo" /></img>
 
 ## Test
 
@@ -58,16 +86,10 @@ $ npm run test:e2e
 $ npm run test:cov
 ```
 
-## Support
+## Framework
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+<a href="http://nestjs.com/" target="blank"><img align="left" width="175" height="100" style="margin-right: 20px" src="https://nestjs.com/img/logo_text.svg" alt="Nest Logo" /></a>
 
-## Stay in touch
+[Nest](https://github.com/nestjs/nest) is a TypeScript progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
+Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. [read more here](https://docs.nestjs.com/support).
