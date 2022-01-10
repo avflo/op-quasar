@@ -21,12 +21,12 @@ $ npm install
 ```
 ### Prerequisites  
 
-- NodeJs `^14.0` 
+- NodeJs `^14.0.0` 
 - Docker & docker-compose (if execute under a docker container)
 
 ### Environment
 
-Create an `.env` file on root of proyect or export the requiered environment variables, you can check for the required env vars on `.env.example` file
+Create an `.env` file on root of project or export the requiered environment variables, you can check for the required env vars on `.env.example` file
 
 ## Running the app
 
@@ -51,7 +51,7 @@ Check `Makefile` for more details
 
 ## Command Execute
 
-For the _ship-location_ you must pass at least and **only 3** distances params for each default satellite 
+For the _ship-location_ you must pass **at least and only 3** distances params for each default satellite 
 
 For the _decode-message_ command you can change the input data by editing the file `src/cmd/messages.ts`
 
@@ -73,7 +73,7 @@ To check some **success** and **error** examples on each endpoint you can change
 
 <img align="center" width="395" height="280" src="resp_examples.gif" alt="Response Examples" /></img>
 
->💡 Note: Remember that you need to attach a valid `x-api-key` on each request. This is set as a minimum security layer
+>💡 Note: Remember that you need to attach a valid `x-api-key` to the header on each request. This is set as a minimum security layer
 
 ## Test
 
