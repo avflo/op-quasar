@@ -71,7 +71,9 @@ Operations Fire Quasar is available under _AWS ECS Service_, you can check the a
 
 To check some **success** and **error** examples on each endpoint you can change the response example at the top of each request.
 
-<img align="center" width="395" height="280" src="resp_examples.gif" alt="Alliance Logo" /></img>
+<img align="center" width="395" height="280" src="resp_examples.gif" alt="Response Examples" /></img>
+
+>💡 Note: Remember that you need to attach a valid `x-api-key` on each request. This is set as a minimum security layer
 
 ## Test
 
@@ -93,3 +95,9 @@ $ npm run test:cov
 [Nest](https://github.com/nestjs/nest) is a TypeScript progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.
 
 Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. [read more here](https://docs.nestjs.com/support).
+
+<br>
+
+___
+
+<right> _Author:_ [@bastian_af](https://github.com/avflo)</right>
