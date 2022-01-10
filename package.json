@@ -1,8 +1,8 @@
 {
   "name": "op-quasar",
-  "version": "0.0.1",
-  "description": "",
-  "author": "",
+  "version": "1.0.0",
+  "description": "operacion fuego de quasar",
+  "author": "bastian_af",
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
