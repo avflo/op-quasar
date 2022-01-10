@@ -7,6 +7,8 @@ import configuration from './config/configuration';
 import { ImperialSignalModule } from './modules/imperial-signal/imperial-signal.module';
 import { DatabaseModule } from './database/database.module';
 import { ApiKeyMiddleware } from './api-key.middleware';
+import { WinstonModule } from 'nest-winston';
+import logger from './config/logger';
 
 const satellites = [
   { name: 'kenobi', distance: 0, message: [], coordinates: [-500, -200] },
@@ -20,6 +22,7 @@ const satellites = [
     ConfigModule.forRoot({
       load: [configuration],
     }),
+    WinstonModule.forRoot(logger),
     DatabaseModule,
     ImperialSignalModule,
   ],

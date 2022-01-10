@@ -4,10 +4,13 @@ import {
   ImperialSignal,
   ImperialSignalModel,
 } from './imperial-signal.interface';
+import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
+import { Logger } from 'winston';
 
 @Injectable()
 export class ImperialSignalService {
   constructor(
+    @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: Logger,
     @Inject('IMPERIAL_SIGNAL_MODEL')
     private imperialSignalModel: Model<ImperialSignalModel>,
   ) {}
@@ -18,7 +21,7 @@ export class ImperialSignalService {
       const result = newSignal.save();
       return result ? true : false;
     } catch (error) {
-      console.error(error);
+      this.logger.error(error);
       return false;
     }
   }
@@ -42,7 +45,7 @@ export class ImperialSignalService {
 
       return signals;
     } catch (error) {
-      console.error(error);
+      this.logger.error(error);
       return null;
     }
   }

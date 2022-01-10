@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Inject } from '@nestjs/common';
 import { Satellite } from './satellite.interface';
 
 @Injectable()
@@ -13,8 +13,6 @@ export class SatelliteService {
     this.distance = options.distance || 0;
     this.message = options.message;
     this.coordinates = options.coordinates;
-
-    console.log('🛰️ INITIALIZE NEW DEFAULT SATELLITE', options);
   }
 
   setDistance(distance: number) {

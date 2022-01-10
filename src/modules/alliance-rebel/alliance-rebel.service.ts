@@ -2,12 +2,15 @@ import { Inject, Injectable } from '@nestjs/common';
 import { SatelliteService } from '../satellite/satellite.service';
 import { TrilaterationService } from '../trilateration/trilateration.service';
 import { AllianceRebel } from './alliante-rebel.interface';
+import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
+import { Logger } from 'winston';
 
 @Injectable()
 export class AllianceRebelService {
   private satellites: Array<SatelliteService> = [];
 
   constructor(
+    @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: Logger,
     @Inject('ALLIANCE_REBEL_OPTIONS') options: AllianceRebel,
     private trilateration: TrilaterationService,
   ) {
@@ -50,7 +53,7 @@ export class AllianceRebelService {
         vectors[2],
         true,
       );
-      console.log('📍 SHIP LOCATION: ', position);
+      this.logger.info('📍 SHIP LOCATION: ', position);
       return position;
     } catch (error) {
       return [];
@@ -78,8 +81,8 @@ export class AllianceRebelService {
        * different because the "delay" or "desfasaje" so we need to find the message with the minimun array length
        * to remove the delay, once we find it slice each message on each satellite
        */
-      console.log(
-        '🔧 FIXING DELAY - secret message real length: ',
+      this.logger.info(
+        '🔧 FIXING DELAY - secret message real length: %i',
         realMsgLength,
       );
       this.satellites.forEach((s) => s.fixMsgDelay(realMsgLength));
@@ -90,7 +93,7 @@ export class AllianceRebelService {
        */
       return this.joinMessage();
     } catch (error) {
-      console.error('💥 DECODE MESSAGE ERROR: %o', error);
+      this.logger.error('💥 DECODE MESSAGE ERROR: %o', error);
       return null;
     }
   }
@@ -108,10 +111,10 @@ export class AllianceRebelService {
         });
       });
       // clean empty strings in message
-      console.log('✉️ MESSAGE: ', joinMessage);
+      this.logger.info('✉️ MESSAGE: ', joinMessage);
       return joinMessage.join(' ');
     } catch (error) {
-      console.error('💥 JOIN SECRET MESSAGE ERROR: %o', error);
+      this.logger.error('💥 JOIN SECRET MESSAGE ERROR: %o', error);
       return null;
     }
   }
