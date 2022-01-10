@@ -22,8 +22,8 @@ export class AppController {
   ) {}
 
   @Get()
-  getHello(): string {
-    return 'FIRE QUASAR';
+  getHello(@Res() res: Response) {
+    res.status(HttpStatus.OK).json('OPERATION FIRE QUASAR');
   }
 
   @Post('/topsecret')
